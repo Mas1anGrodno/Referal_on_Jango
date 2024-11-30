@@ -19,6 +19,8 @@ class PhoneNumberVerification(models.Model):
     auth_code = models.CharField(max_length=4, blank=True)
     # unique referal number 6 symbols long
     referal_number = models.CharField(max_length=6, unique=True, default=generate_unique_code)
+    # activated referal number
+    activated_referal_number = models.CharField(max_length=6, blank=True, null=True)
 
     def __str__(self):
         return self.phone_number

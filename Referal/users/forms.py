@@ -17,3 +17,11 @@ class AuthCodeForm(forms.Form):
         label="Authentication Code",
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Authentication Code"}),
     )
+
+
+class InviteCodeForm(forms.Form):
+    invite_code = forms.CharField(
+        max_length=6,
+        label="Invite Code",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Invite Code"}),
+    )

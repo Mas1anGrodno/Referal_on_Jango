@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, get_user_model
 from .models import PhoneNumberVerification
-from .forms import PhoneNumberForm, AuthCodeForm
+from .forms import PhoneNumberForm, AuthCodeForm, InviteCodeForm
 import random
 from time import sleep
 
@@ -19,8 +19,10 @@ def phone_number_view(request):
             phone_verification.auth_code = code
             phone_verification.save()
 
+            # Имитируем отправку кода с задержкой
             sleep(2)
 
+            # Перенаправляем пользователя на ввод кода
             return redirect("verify_code")
     else:
         form = PhoneNumberForm()
@@ -43,13 +45,14 @@ def auth_code_view(request):
                     user = phone_verification.user
                     login(request, user)
 
-                # Getting user Data
+                # Получение данных пользователя
                 user_data = {
                     "id": user.id,
                     "username": user.username,
                     "email": user.email,
                     "phone_number": phone_verification.phone_number,
                     "referal_number": phone_verification.referal_number,
+                    "activated_referal_number": phone_verification.activated_referal_number,
                 }
                 return render(request, "users/user_data.html", user_data)
             except PhoneNumberVerification.DoesNotExist:
@@ -57,3 +60,32 @@ def auth_code_view(request):
     else:
         form = AuthCodeForm()
     return render(request, "users/auth_code.html", {"form": form})
+
+
+def profile_view(request):
+    user = request.user
+    phone_verification = PhoneNumberVerification.objects.get(user=user)
+    if request.method == "POST":
+        form = InviteCodeForm(request.POST)
+        if form.is_valid():
+            invite_code = form.cleaned_data["invite_code"]
+            # Проверяем, существует ли инвайт-код и не активирован ли он пользователем ранее
+            if PhoneNumberVerification.objects.filter(referal_number=invite_code).exists() and not phone_verification.activated_referal_number:
+                phone_verification.activated_referal_number = invite_code
+                phone_verification.save()
+                return redirect("profile")
+            else:
+                form.add_error("invite_code", "Invalid or already activated invite code")
+    else:
+        form = InviteCodeForm()
+
+    profile_data = {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "phone_number": phone_verification.phone_number,
+        "referal_number": phone_verification.referal_number,
+        "activated_referal_number": phone_verification.activated_referal_number,
+        "form": form,
+    }
+    return render(request, "users/profile.html", profile_data)

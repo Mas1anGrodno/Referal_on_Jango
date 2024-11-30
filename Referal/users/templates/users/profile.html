@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Data</title>
+    <title>Profile</title>
 </head>
 <body>
-    <h1>User Data</h1>
+    <h1>User Profile</h1>
     <p><strong>ID:</strong> {{ id }}</p>
     <p><strong>Username:</strong> {{ username }}</p>
     <p><strong>Email:</strong> {{ email }}</p>
     <p><strong>Phone Number:</strong> {{ phone_number }}</p>
     <p><strong>Referral Number:</strong> {{ referal_number }}</p>
     <p><strong>Activated Invite Code:</strong> {{ activated_referal_number }}</p>
-    <p><a href="/profile/">Edit profile</a></p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Invite Code</button>
+    </form>
 </body>
 </html>
