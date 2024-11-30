@@ -5,10 +5,11 @@ from .forms import PhoneNumberForm, AuthCodeForm, InviteCodeForm, ProfileForm
 import random
 from time import sleep
 
-# ----------------------------------API-------------------------------
+# ----------------------------------API----------------------------------
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from .serializers import PhoneNumberVerificationSerializer
+from .serializers import PhoneNumberVerificationSerializer, UserSerializer
+
 
 User = get_user_model()
 
@@ -99,7 +100,15 @@ def profile_view(request):
     return render(request, "users/profile.html", profile_data)
 
 
-# ----------------------------------API-------------------------------
+# ----------------------------------API----------------------------------
+
+
+class UserDetailAPIView(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
 
 
 class ProfileAPIView(generics.GenericAPIView):
