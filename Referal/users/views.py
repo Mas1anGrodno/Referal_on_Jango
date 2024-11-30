@@ -5,6 +5,11 @@ from .forms import PhoneNumberForm, AuthCodeForm, InviteCodeForm, ProfileForm
 import random
 from time import sleep
 
+# ----------------------------------API-------------------------------
+from rest_framework import generics, permissions
+from rest_framework.response import Response
+from .serializers import PhoneNumberVerificationSerializer
+
 User = get_user_model()
 
 
@@ -92,3 +97,24 @@ def profile_view(request):
         "profile_form": profile_form,
     }
     return render(request, "users/profile.html", profile_data)
+
+
+# ----------------------------------API-------------------------------
+
+
+class ProfileAPIView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        phone_verification = PhoneNumberVerification.objects.get(user=user)
+
+        # Получаем список пользователей, которые использовали инвайт-код текущего пользователя
+        invited_users = PhoneNumberVerification.objects.filter(activated_referal_number=phone_verification.referal_number)
+        serializer = PhoneNumberVerificationSerializer(invited_users, many=True)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        user = self.request.user
+        phone_verification = PhoneNumberVerification.objects.get(user=user)
+        return PhoneNumberVerification.objects.filter(activated_referal_number=phone_verification.referal_number)
