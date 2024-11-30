@@ -104,8 +104,11 @@ def profile_view(request):
 
 class ProfileAPIView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PhoneNumberVerificationSerializer
 
     def get(self, request, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return Response()  # нужно для корректной генерации схемы
         user = request.user
         phone_verification = PhoneNumberVerification.objects.get(user=user)
 
