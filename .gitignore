@@ -1,1 +1,3 @@
 /.venv
+/Referal/env/.env.dev
+/Referal/Referal/__pycache__
