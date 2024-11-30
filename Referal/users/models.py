@@ -5,7 +5,7 @@ import string
 
 
 # Function to generate 6 random symbols
-def generate_unique_code():
+def generate_unique_code() -> str:
     return "".join(random.choices(string.ascii_letters + string.digits, k=6))
 
 

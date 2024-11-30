@@ -1,4 +1,7 @@
 from django import forms
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 # Form for entering a phone number
@@ -25,3 +28,13 @@ class InviteCodeForm(forms.Form):
         label="Invite Code",
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Invite Code"}),
     )
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "email"]
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control", "placeholder": "Username"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email"}),
+        }

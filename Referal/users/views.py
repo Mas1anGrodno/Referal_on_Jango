@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, get_user_model
 from .models import PhoneNumberVerification
-from .forms import PhoneNumberForm, AuthCodeForm, InviteCodeForm
+from .forms import PhoneNumberForm, AuthCodeForm, InviteCodeForm, ProfileForm
 import random
 from time import sleep
 
@@ -65,19 +65,21 @@ def auth_code_view(request):
 def profile_view(request):
     user = request.user
     phone_verification = PhoneNumberVerification.objects.get(user=user)
+    invite_form = InviteCodeForm(request.POST or None)
+    profile_form = ProfileForm(request.POST or None, instance=user)
+
     if request.method == "POST":
-        form = InviteCodeForm(request.POST)
-        if form.is_valid():
-            invite_code = form.cleaned_data["invite_code"]
-            # Проверяем, существует ли инвайт-код и не активирован ли он пользователем ранее
+        if invite_form.is_valid():
+            invite_code = invite_form.cleaned_data["invite_code"]
             if PhoneNumberVerification.objects.filter(referal_number=invite_code).exists() and not phone_verification.activated_referal_number:
                 phone_verification.activated_referal_number = invite_code
                 phone_verification.save()
                 return redirect("profile")
             else:
-                form.add_error("invite_code", "Invalid or already activated invite code")
-    else:
-        form = InviteCodeForm()
+                invite_form.add_error("invite_code", "Invalid or already activated invite code")
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect("profile")
 
     profile_data = {
         "id": user.id,
@@ -86,6 +88,7 @@ def profile_view(request):
         "phone_number": phone_verification.phone_number,
         "referal_number": phone_verification.referal_number,
         "activated_referal_number": phone_verification.activated_referal_number,
-        "form": form,
+        "invite_form": invite_form,
+        "profile_form": profile_form,
     }
     return render(request, "users/profile.html", profile_data)
