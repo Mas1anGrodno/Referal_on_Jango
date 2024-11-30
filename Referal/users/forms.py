@@ -1,12 +1,19 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import get_user_model
 
 
-class LoginUserForm(AuthenticationForm):
-    username = forms.CharField(label="Login", widget=forms.TextInput(attrs={"class": "forms-input"}), max_length=255, required=False)
-    password = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={"class": "forms-input"}), max_length=255, required=False)
+# Form for entering a phone number
+class PhoneNumberForm(forms.Form):
+    phone_number = forms.CharField(
+        max_length=15,
+        label="Phone Number",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone Number"}),
+    )
 
-    class Meta:
-        model = get_user_model()
-        fields = ["username", "password"]
+
+# Form for entering the confirmation code
+class AuthCodeForm(forms.Form):
+    auth_code = forms.CharField(
+        max_length=4,
+        label="Authentication Code",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Authentication Code"}),
+    )
