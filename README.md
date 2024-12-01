@@ -2,7 +2,7 @@
 
 This API allows you to manage phone number verifications and user referrals.</b>
 It provides endpoints for creating and updating phone number verifications, retrieving user details, and listing referrals.</b>
-Swagger is integrated for easy API documentation and testing.
+[Swagger](#swagger-integration) is integrated for easy API documentation and testing.
 
 ## Endpoints
 
@@ -186,6 +186,6 @@ _Description:_ Creates a phone number verification entry.
 
 _Description:_ Updates a phone number verification entry.
 
-###### Swagger Integration
+##### Swagger Integration
 
 _Swagger is integrated for easy API documentation and testing. You can access the Swagger UI at the /swagger/ endpoint._
