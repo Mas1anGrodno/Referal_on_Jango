@@ -13,6 +13,8 @@ def generate_unique_code() -> str:
 class PhoneNumberVerification(models.Model):
     # Creating OneToOne connection to standard model User
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    # country code for defining user country
+    country_code = models.CharField(max_length=5, blank=True, null=True)
     # Making phone unique - 15 digits length
     phone_number = models.CharField(max_length=15, unique=True)
     # Empty field for 4 digith auth code

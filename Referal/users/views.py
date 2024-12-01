@@ -18,10 +18,13 @@ def phone_number_view(request):
     if request.method == "POST":
         form = PhoneNumberForm(request.POST)
         if form.is_valid():
+            country_code = form.cleaned_data["country_code"]
             phone_number = form.cleaned_data["phone_number"]
             code = str(random.randint(1000, 9999))
             print(code)
-            phone_verification, created = PhoneNumberVerification.objects.get_or_create(phone_number=phone_number)
+            phone_verification, created = PhoneNumberVerification.objects.get_or_create(phone_number=phone_number, defaults={"country_code": country_code})
+            if not created:
+                phone_verification.country_code = country_code
             phone_verification.auth_code = code
             phone_verification.save()
 
@@ -111,7 +114,7 @@ class UserDetailAPIView(generics.RetrieveAPIView):
         return self.request.user
 
 
-class ProfileAPIView(generics.GenericAPIView):
+class ProfileRefgeralsAPIView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = PhoneNumberVerificationSerializer
 
