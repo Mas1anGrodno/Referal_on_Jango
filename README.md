@@ -120,7 +120,7 @@ Swagger is integrated for easy API documentation and testing.
 
 **User**
 
-- Fields:
+- _Fields:_
 
   username: String, required
 
@@ -128,7 +128,7 @@ Swagger is integrated for easy API documentation and testing.
 
 **PhoneNumberVerification**
 
-- Fields:
+- _Fields:_
 
   phone_number: String, required, unique
 
@@ -146,7 +146,7 @@ Swagger is integrated for easy API documentation and testing.
 
 **UserSerializer**
 
-- Fields:
+- _Fields:_
 
   username
 
@@ -154,7 +154,7 @@ Swagger is integrated for easy API documentation and testing.
 
 **PhoneNumberVerificationSerializer**
 
-- Fields:
+- _Fields:_
 
   phone_number
 
@@ -172,33 +172,20 @@ Swagger is integrated for easy API documentation and testing.
 
 **UserDetailAPIView**
 
-**Description:** Retrieves the details of the authenticated user.
+_Description:_ Retrieves the details of the authenticated user.
 
 **ProfileRefgeralsAPIView**
 
-**Description:** Retrieves the list of users who used the authenticated user's referral code.
+_Description:_ Retrieves the list of users who used the authenticated user's referral code.
 
 **PhoneNumberVerificationCreateAPIView**
 
-**Description:** Creates a phone number verification entry.
+_Description:_ Creates a phone number verification entry.
+
 **PhoneNumberVerificationUpdateAPIView**
 
-**Description:** Updates a phone number verification entry.
-
-###### URL Configuration
-
-**Endpoints:**
-
-    api/profile-referals/: ProfileRefgeralsAPIView
-
-    api/user/: UserDetailAPIView
-
-    api/phone-number/create/: PhoneNumberVerificationCreateAPIView
-
-    api/phone-number/update/<str:phone_number>/: PhoneNumberVerificationUpdateAPIView
-
-    swagger/: Swagger UI for API documentation
+_Description:_ Updates a phone number verification entry.
 
 ###### Swagger Integration
 
-Swagger is integrated for easy API documentation and testing. You can access the Swagger UI at the /swagger/ endpoint.
+_Swagger is integrated for easy API documentation and testing. You can access the Swagger UI at the /swagger/ endpoint._
