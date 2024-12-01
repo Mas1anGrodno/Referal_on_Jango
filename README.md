@@ -1,6 +1,9 @@
-# Endpoints
+## Endpoints
 
-• `[/api/phone-number/create/](#/api/phone-number/create/)`
+- [Create Phone Number Verification](#create-phone-number-verification)
+- [Update Phone Number Verification](#update-phone-number-verification)
+- [User Details](#user-details)
+- [User Referrals](#user-referrals)
 
 ## Create Phone Number Verification
 
@@ -36,7 +39,7 @@
 }
 ```
 
-### Update Phone Number Verification
+## Update Phone Number Verification
 
 **Endpoint:** `/api/phone-number/update/<str:phone_number>/ `
 **Method:** `PUT`
@@ -67,4 +70,42 @@
     "email": "user1@example.com"
   }
 }
+```
+
+## User Details
+
+**Endpoint:** `/api/user/`
+**Method:** `GET`
+**Description:** `Retrieves the details of the authenticated user.`
+
+**Response:**
+
+```json
+{
+  "username": "user1",
+  "email": "user1@example.com"
+}
+```
+
+## User Referrals
+
+**Endpoint:** /api/profile-referals/
+**Method:** GET
+**Description:** Retrieves the list of users who used the authenticated user's referral code.
+**Response:**
+
+```json
+[
+  {
+    "phone_number": "0987654321",
+    "auth_code": "5678",
+    "referal_number": "ABCD12",
+    "activated_referal_number": "EFGH34",
+    "country_code": "+375",
+    "user": {
+      "username": "user2",
+      "email": "user2@example.com"
+    }
+  }
+]
 ```
