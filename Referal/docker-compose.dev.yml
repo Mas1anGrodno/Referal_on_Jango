@@ -1,0 +1,75 @@
+volumes:
+  pgdata:
+  pgadmin-data:
+  static:
+  media:
+
+
+services:
+
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    restart: always
+    env_file:
+      - /env/.env.dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    networks:
+      - django_netwrk
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:7.2
+    env_file:
+      - /env/.env.dev
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+    networks:
+      - django_netwrk
+
+  django:
+    build:
+      context: .
+    ports:
+      - '8000:8000'
+    container_name: django
+    env_file:
+      - /env/.env.dev
+    volumes:
+      - ./:/app
+      - static:/app/static
+    depends_on:
+      - postgres
+
+    command: sh -c "python manage.py collectstatic --no-input && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+    networks:
+      - django_netwrk
+
+  nginx:
+    container_name: nginx
+    working_dir: /app
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - static:/app/static
+      - ./nginx/dev/:/etc/nginx/conf.d:ro
+    links:
+      - django
+    depends_on:
+      - django
+
+    networks:
+      - django_netwrk
+
+networks:
+  django_netwrk:
