@@ -22,6 +22,8 @@ def phone_number_view(request):
             country_code = form.cleaned_data["country_code"]
             phone_number = form.cleaned_data["phone_number"]
             code = str(random.randint(1000, 9999))
+            # Сохранение кода в сессии
+            request.session["auth_code"] = code
             # Printing code to console
             print(code)
             phone_verification, created = PhoneNumberVerification.objects.get_or_create(phone_number=phone_number, defaults={"country_code": country_code})
@@ -41,12 +43,13 @@ def phone_number_view(request):
 
 
 def auth_code_view(request):
+    auth_code = request.session.get("auth_code", None)  # Получение кода из сессии
     if request.method == "POST":
         form = AuthCodeForm(request.POST)
         if form.is_valid():
-            auth_code = form.cleaned_data["auth_code"]
+            input_code = form.cleaned_data["auth_code"]
             try:
-                phone_verification = PhoneNumberVerification.objects.get(auth_code=auth_code)
+                phone_verification = PhoneNumberVerification.objects.get(auth_code=input_code)
                 if phone_verification.user is None:
                     user = User.objects.create_user(username=phone_verification.phone_number)
                     phone_verification.user = user
@@ -70,7 +73,7 @@ def auth_code_view(request):
                 form.add_error("auth_code", "Invalid code")
     else:
         form = AuthCodeForm()
-    return render(request, "users/auth_code.html", {"form": form})
+    return render(request, "users/auth_code.html", {"form": form, "auth_code": auth_code})
 
 
 def profile_view(request):

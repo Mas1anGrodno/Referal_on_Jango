@@ -95,7 +95,8 @@ It provides endpoints for creating and updating phone number verifications, retr
 
 ## User Referrals
 
-**Endpoint:** /api/profile-referals/
+**Endpoint - 1:** /api/profile-referals/
+**Endpoint - 2:** /api/profile-referals/{id}
 **Method:** GET
 **Description:** Retrieves the list of users who used the authenticated user's referral code.
 **Response:**
