@@ -12,7 +12,7 @@ services:
     container_name: postgres
     restart: always
     env_file:
-      - /env/.env.dev
+      - env/.env.dev
     volumes:
       - pgdata:/var/lib/postgresql/data/
     networks:
@@ -22,7 +22,7 @@ services:
     container_name: pgadmin_container
     image: dpage/pgadmin4:8.13
     env_file:
-      - /env/.env.dev
+      - env/.env.dev
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     ports:
@@ -41,7 +41,7 @@ services:
       - '8000:8000'
     container_name: django
     env_file:
-      - /env/.env.dev
+      - env/.env.dev
     volumes:
       - ./:/app
       - static:/app/static
