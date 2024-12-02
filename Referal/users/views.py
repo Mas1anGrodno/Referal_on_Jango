@@ -6,7 +6,7 @@ import random
 from time import sleep
 
 # ----------------------------------API----------------------------------
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .serializers import PhoneNumberVerificationSerializer, UserSerializer
 
@@ -133,3 +133,24 @@ class ProfileRefgeralsAPIView(generics.GenericAPIView):
         user = self.request.user
         phone_verification = PhoneNumberVerification.objects.get(user=user)
         return PhoneNumberVerification.objects.filter(activated_referal_number=phone_verification.referal_number)
+
+
+class PhoneNumberVerificationCreateAPIView(generics.CreateAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PhoneNumberVerificationSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class PhoneNumberVerificationUpdateAPIView(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PhoneNumberVerificationSerializer
+    lookup_field = "phone_number"
+
+    def get_queryset(self):
+        return PhoneNumberVerification.objects.all()
