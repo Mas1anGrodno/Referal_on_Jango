@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .views.api_views import *
+from .views.regular_views import *
 from users.swagger import schema_view
 
 urlpatterns = [
