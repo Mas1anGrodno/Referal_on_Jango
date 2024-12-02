@@ -80,7 +80,8 @@ It provides endpoints for creating and updating phone number verifications, retr
 
 ## User Details
 
-**Endpoint:** `/api/user/`
+**Endpoint - 1:** `/api/user/`
+**Endpoint - 1:** `/api/user/<int:id>/`
 **Method:** `GET`
 **Description:** `Retrieves the details of the authenticated user.`
 
@@ -95,8 +96,8 @@ It provides endpoints for creating and updating phone number verifications, retr
 
 ## User Referrals
 
-**Endpoint - 1:** /api/profile-referals/
-**Endpoint - 2:** /api/profile-referals/{id}
+**Endpoint - 1:** `/api/profile-referals/`
+**Endpoint - 2:** `/api/profile-referals/<int:id>/`
 **Method:** GET
 **Description:** Retrieves the list of users who used the authenticated user's referral code.
 **Response:**
