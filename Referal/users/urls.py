@@ -7,7 +7,8 @@ urlpatterns = [
     path("verify-code/", views.auth_code_view, name="verify_code"),
     path("profile/", views.profile_view, name="profile"),
     # ----------------------------------API----------------------------------
-    path("api/profile-referals/", views.ProfileRefgeralsAPIView.as_view(), name="api_profile"),
+    path("api/profile-referals/", views.ProfileReferralsAPIView.as_view(), name="api_profile"),
+    path("api/profile-referals/<int:id>/", views.ProfileReferralsAPIView.as_view(), name="api_profile_referals_by_id"),
     path("api/user/", views.UserDetailAPIView.as_view(), name="api_user_detail"),
     path("api/phone-number/create/", views.PhoneNumberVerificationCreateAPIView.as_view(), name="phone_number_create"),
     path("api/phone-number/update/<str:phone_number>/", views.PhoneNumberVerificationUpdateAPIView.as_view(), name="phone_number_update"),

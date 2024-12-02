@@ -8,6 +8,7 @@ from time import sleep
 # ----------------------------------API----------------------------------
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound, NotAuthenticated
 from .serializers import PhoneNumberVerificationSerializer, UserSerializer
 
 
@@ -21,6 +22,7 @@ def phone_number_view(request):
             country_code = form.cleaned_data["country_code"]
             phone_number = form.cleaned_data["phone_number"]
             code = str(random.randint(1000, 9999))
+            # Printing code to console
             print(code)
             phone_verification, created = PhoneNumberVerification.objects.get_or_create(phone_number=phone_number, defaults={"country_code": country_code})
             if not created:
@@ -107,36 +109,63 @@ def profile_view(request):
 
 
 class UserDetailAPIView(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    # permission classes swiched to AllowAny for testing
+    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
 
     def get_object(self):
         return self.request.user
 
 
-class ProfileRefgeralsAPIView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+class ProfileReferralsAPIView(generics.GenericAPIView):
+    # permission classes swiched to AllowAny for testing
+    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.IsAuthenticated]
     serializer_class = PhoneNumberVerificationSerializer
 
     def get(self, request, *args, **kwargs):
         if getattr(self, "swagger_fake_view", False):
             return Response()  # нужно для корректной генерации схемы
-        user = request.user
+
+        user_id = kwargs.get("id")
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                raise NotFound(detail="User not found.")
+        else:
+            user = request.user
+            if not user.is_authenticated:
+                return Response({"detail": "You must use the endpoint with user ID: /api/profile-referals/<int:id>/"}, status=status.HTTP_403_FORBIDDEN)
+
         phone_verification = PhoneNumberVerification.objects.get(user=user)
 
-        # Получаем список пользователей, которые использовали инвайт-код текущего пользователя
+        # Получаем список пользователей, которые использовали инвайт-код указанного пользователя
         invited_users = PhoneNumberVerification.objects.filter(activated_referal_number=phone_verification.referal_number)
         serializer = PhoneNumberVerificationSerializer(invited_users, many=True)
         return Response(serializer.data)
 
     def get_queryset(self):
-        user = self.request.user
+        user_id = self.kwargs.get("id")
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                raise NotFound(detail="User not found.")
+        else:
+            user = self.request.user
+            if not user.is_authenticated:
+                raise NotAuthenticated(detail="Authentication credentials were not provided.")
+
         phone_verification = PhoneNumberVerification.objects.get(user=user)
         return PhoneNumberVerification.objects.filter(activated_referal_number=phone_verification.referal_number)
 
 
 class PhoneNumberVerificationCreateAPIView(generics.CreateAPIView):
+    # permission classes swiched to AllowAny for testing
     permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.IsAuthenticated]
     serializer_class = PhoneNumberVerificationSerializer
 
     def create(self, request, *args, **kwargs):
@@ -148,7 +177,9 @@ class PhoneNumberVerificationCreateAPIView(generics.CreateAPIView):
 
 
 class PhoneNumberVerificationUpdateAPIView(generics.UpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    # permission classes swiched to AllowAny for testing
+    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.IsAuthenticated]
     serializer_class = PhoneNumberVerificationSerializer
     lookup_field = "phone_number"
 
