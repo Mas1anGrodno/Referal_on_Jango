@@ -121,6 +121,25 @@ class UserDetailAPIView(generics.RetrieveAPIView):
         return self.request.user
 
 
+class UserDetailByIdAPIView(generics.RetrieveAPIView):
+    # permission classes swiched to AllowAny for testing
+    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PhoneNumberVerificationSerializer
+    serializer_class = UserSerializer
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return User.objects.all()
+
+    def get_object(self):
+        user_id = self.kwargs.get("id")
+        try:
+            return User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise NotFound(detail="User not found.")
+
+
 class ProfileReferralsAPIView(generics.GenericAPIView):
     # permission classes swiched to AllowAny for testing
     permission_classes = [permissions.AllowAny]

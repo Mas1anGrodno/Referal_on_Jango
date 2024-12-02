@@ -2,26 +2,30 @@
 <html>
 <head>
     <title>Profile</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/styles.css' %}">
 </head>
 <body>
-    <h1>User Profile</h1>
-    <p><strong>ID:</strong> {{ id }}</p>
-    <p><strong>Username:</strong> {{ username }}</p>
-    <p><strong>Email:</strong> {{ email }}</p>
-    <p><strong>Phone Number:</strong> {{ phone_number }}</p>
-    <p><strong>Referral Number:</strong> {{ referal_number }}</p>
-    <p><strong>Activated Invite Code:</strong> {{ activated_referal_number }}</p>
-    <h2>Edit Profile</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ profile_form.as_p }}
-        <button type="submit">Save Changes</button>
-    </form>
-    <h2>Activate Invite Code</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ invite_form.as_p }}
-        <button type="submit">Submit Invite Code</button>
-    </form>
+    <div class="container">
+        <h1>User Profile</h1>
+        <p><strong>ID:</strong> {{ id }}</p>
+        <p><strong>Username:</strong> {{ username }}</p>
+        <p><strong>Email:</strong> {{ email }}</p>
+        <p><strong>Phone Number:</strong> {{ phone_number }}</p>
+        <p><strong>Referral Number:</strong> {{ referal_number }}</p>
+        <p><strong>Activated Invite Code:</strong> {{ activated_referal_number }}</p>
+        <h2>Edit Profile</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ profile_form.as_p }}
+            <button type="submit">Save Changes</button>
+        </form>
+        <h2>Activate Invite Code</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ invite_form.as_p }}
+            <button type="submit">Submit Invite Code</button>
+        </form>
+    </div>
 </body>
 </html>

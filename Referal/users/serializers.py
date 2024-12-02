@@ -14,7 +14,8 @@ class PhoneNumberVerificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PhoneNumberVerification
-        fields = ["phone_number", "auth_code", "referal_number", "activated_referal_number", "country_code", "user"]
+        # fields = ["phone_number", "auth_code", "referal_number", "activated_referal_number", "country_code", "user"]
+        fields = ["phone_number", "referal_number", "user"]
 
     def create(self, validated_data):
         user_data = validated_data.pop("user", None)  # Извлекаем данные пользователя, если они есть

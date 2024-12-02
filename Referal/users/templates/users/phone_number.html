@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Enter Phone Number</title>
-  </head>
-  <body>
-    <h1>Enter Your Phone Number</h1>
-    <form method="post">
-      {% csrf_token %}
-      <div>{{ form.country_code.label_tag }} {{ form.country_code }}</div>
-      <div>
-        {{ form.phone_number.label_tag }} {{ form.phone_number }}
-        <div>{% if form.phone_number.errors %}</div>
-        <div class="error">{{ form.phone_number.errors }}</div>
-        {% endif %}
-      </div>
-      <button type="submit">Submit</button>
-    </form>
-  </body>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Enter Your Phone Number</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                {{ form.country_code.label_tag }} {{ form.country_code }}
+            </div>
+            <div>
+                {{ form.phone_number.label_tag }} {{ form.phone_number }}
+                {% if form.phone_number.errors %}
+                <div class="error">{{ form.phone_number.errors }}</div>
+                {% endif %}
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
 </html>
