@@ -5,12 +5,13 @@ from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
+        # Serialize fields from standard model User
         model = User
         fields = ["username", "email"]
 
 
 class PhoneNumberVerificationSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)  # Устанавливаем поле user только для чтения
+    user = UserSerializer(read_only=True)  # Set the user field to read-only
 
     class Meta:
         model = PhoneNumberVerification
@@ -18,10 +19,10 @@ class PhoneNumberVerificationSerializer(serializers.ModelSerializer):
         fields = ["phone_number", "referal_number", "user"]
 
     def create(self, validated_data):
-        user_data = validated_data.pop("user", None)  # Извлекаем данные пользователя, если они есть
+        user_data = validated_data.pop("user", None)  # Extract user data if it exists
         phone_number_verification = PhoneNumberVerification.objects.create(**validated_data)
 
-        # Создаем пользователя, если данные пользователя переданы
+        # Create user if user data is passed
         if user_data:
             user = User.objects.create(**user_data)
             phone_number_verification.user = user

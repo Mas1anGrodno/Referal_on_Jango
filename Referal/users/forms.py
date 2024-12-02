@@ -24,6 +24,7 @@ class PhoneNumberForm(forms.Form):
     phone_number = forms.CharField(
         max_length=15,
         label="Phone Number",
+        # attrs={"class": "form-control"}: Adds the form-control CSS class to the input field. This is commonly used to style the input field, for example in Bootstrap.
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone Number"}),
     )
 

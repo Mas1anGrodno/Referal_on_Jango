@@ -22,7 +22,7 @@ def phone_number_view(request):
             country_code = form.cleaned_data["country_code"]
             phone_number = form.cleaned_data["phone_number"]
             code = str(random.randint(1000, 9999))
-            # Сохранение кода в сессии
+            # Saving code in session
             request.session["auth_code"] = code
             # Printing code to console
             print(code)
@@ -32,10 +32,10 @@ def phone_number_view(request):
             phone_verification.auth_code = code
             phone_verification.save()
 
-            # Имитируем отправку кода с задержкой
+            # Simulate sending code with a delay 2 sec
             sleep(2)
 
-            # Перенаправляем пользователя на ввод кода
+            # Redirect the user to enter the code
             return redirect("verify_code")
     else:
         form = PhoneNumberForm()
@@ -43,7 +43,7 @@ def phone_number_view(request):
 
 
 def auth_code_view(request):
-    auth_code = request.session.get("auth_code", None)  # Получение кода из сессии
+    auth_code = request.session.get("auth_code", None)  # Getting code from session
     if request.method == "POST":
         form = AuthCodeForm(request.POST)
         if form.is_valid():
@@ -59,7 +59,7 @@ def auth_code_view(request):
                     user = phone_verification.user
                     login(request, user)
 
-                # Получение данных пользователя
+                # Getting user data
                 user_data = {
                     "id": user.id,
                     "username": user.username,
@@ -148,7 +148,7 @@ class ProfileReferralsAPIView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         if getattr(self, "swagger_fake_view", False):
-            return Response()  # нужно для корректной генерации схемы
+            return Response()  # needed for correct generation of the scheme
 
         user_id = kwargs.get("id")
         if user_id:
@@ -163,7 +163,7 @@ class ProfileReferralsAPIView(generics.GenericAPIView):
 
         phone_verification = PhoneNumberVerification.objects.get(user=user)
 
-        # Получаем список пользователей, которые использовали инвайт-код указанного пользователя
+        # We get a list of users who used the invite code of the specified user
         invited_users = PhoneNumberVerification.objects.filter(activated_referal_number=phone_verification.referal_number)
         serializer = PhoneNumberVerificationSerializer(invited_users, many=True)
         return Response(serializer.data)
