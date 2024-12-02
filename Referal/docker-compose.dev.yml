@@ -20,7 +20,7 @@ services:
 
   pgadmin:
     container_name: pgadmin_container
-    image: dpage/pgadmin4:7.2
+    image: dpage/pgadmin4:8.13
     env_file:
       - /env/.env.dev
     volumes:
