@@ -1,0 +1,28 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: SSH into server and deploy
+        run: |
+          ssh -i "mas.frankfurt.key.pem" ubuntu@ec2-3-124-187-146.eu-central-1.compute.amazonaws.com << 'EOF'
+            cd /home/ubuntu/Referal_on_Jango/
+            git pull origin master
+            docker-compose down
+            docker-compose up -d
+          EOF
