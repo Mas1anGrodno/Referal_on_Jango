@@ -1,4 +1,4 @@
-# Overview !
+# Overview
 
 This API allows you to manage phone number verifications and user referrals.</b>
 It provides endpoints for creating and updating phone number verifications, retrieving user details, and listing referrals.</b>
