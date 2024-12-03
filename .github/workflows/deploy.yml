@@ -23,6 +23,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-124-187-146.eu-central-1.compute.amazonaws.com << 'EOF'
             cd /home/ubuntu/Referal_on_Jango/
             git pull origin master
+            cd /home/ubuntu/Referal_on_Jango/Referal
             sudo docker compose -f docker-compose.dev.yml build
             sudo docker compose -f docker-compose.dev.yml up
           EOF
