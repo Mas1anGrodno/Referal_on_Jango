@@ -13,9 +13,9 @@ It provides endpoints for creating and updating phone number verifications, retr
 
 ## Create Phone Number Verification
 
-**Endpoint:** `/api/phone-number/create/`</b> 
-**Method:** `POST`</b>
-**Description:** Creates a phone number verification entry.</b>
+**Endpoint:** `/api/phone-number/create/`
+**Method:** `POST`
+**Description:** Creates a phone number verification entry.
 
 **Request Body:**
 
@@ -47,9 +47,9 @@ It provides endpoints for creating and updating phone number verifications, retr
 
 ## Update Phone Number Verification
 
-**Endpoint:** `/api/phone-number/update/<str:phone_number>/ `</b>
+**Endpoint:** `/api/phone-number/update/<str:phone_number>/ `
 **Method:** `PUT`</b>
-**Description:** `Updates a phone number verification entry.`</b>
+**Description:** `Updates a phone number verification entry.`
 
 **Request Body:**
 
@@ -80,10 +80,10 @@ It provides endpoints for creating and updating phone number verifications, retr
 
 ## User Details
 
-**Endpoint - 1:** `/api/user/`</b>
-**Endpoint - 1:** `/api/user/<int:id>/`</b>
+**Endpoint - 1:** `/api/user/`
+**Endpoint - 1:** `/api/user/<int:id>/`
 **Method:** `GET`</b>
-**Description:** `Retrieves the details of the authenticated user.`</b>
+**Description:** `Retrieves the details of the authenticated user.`
 
 **Response:**
 
@@ -96,11 +96,11 @@ It provides endpoints for creating and updating phone number verifications, retr
 
 ## User Referrals
 
-**Endpoint - 1:** `/api/profile-referals/`</b>
-**Endpoint - 2:** `/api/profile-referals/<int:id>/`</b>
-**Method:** GET</b>
-**Description:** Retrieves the list of users who used the authenticated user's referral code.</b>
-**Response:**</b>
+**Endpoint - 1:** `/api/profile-referals/`
+**Endpoint - 2:** `/api/profile-referals/<int:id>/`
+**Method:** GET
+**Description:** Retrieves the list of users who used the authenticated user's referral code.
+**Response:**
 
 ```json
 [
